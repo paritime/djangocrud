@@ -1,0 +1,85 @@
+{% extends 'base.html' %} {% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <h1>Home</h1>
+    
+    <h2>Interacciones</h2>
+    <p style="color: black; font-size: 20px">
+      <ul>
+        <li>En una aplicación Django típica, <strong>las URLs </strong>dirigen las solicitudes a vistas
+          específicas. Estas vistas pueden interactuar con los modelos para
+          recuperar o almacenar datos en la base de datos.</li>
+
+        <li> <strong>Las vistas </strong>utilizan templates para renderizar la interfaz de usuario y presentar la
+          información de manera amigable. Los modelos definen la estructura de la
+          base de datos y se utilizan en las vistas para realizar operaciones de
+          CRUD (Crear, Leer, Actualizar, Eliminar) en los datos.</li>
+
+        <li> <strong>Los modelos </strong>definen la estructura de la
+            base de datos y se utilizan en las vistas para realizar operaciones de
+            CRUD (Crear, Leer, Actualizar, Eliminar) en los datos.</li>
+
+          <li>En resumen, las URLs dirigen el tráfico a las vistas, las vistas interactúan con los
+          modelos para gestionar datos y los templates se encargan de la
+          presentación visual de la información. Este flujo integral permite el
+          desarrollo de aplicaciones web sólidas y estructuradas en Django.</li>
+      </ul>
+    </p>
+
+    <h2>Views (Vistas):</h2>
+    <p style="color: black; font-size: 20px">
+      <ul>
+        <li><strong>Funcionalidad Principal:</strong> Las vistas en Django son funciones o clases que
+          manejan las solicitudes HTTP y devuelven las respuestas adecuadas.
+          Contienen la lógica de la aplicación y determinan qué datos se mostrarán
+          al usuario.</li>
+        <li><strong>Ejemplo de Funcionalidad:</strong> Una vista puede recuperar datos de
+          la base de datos, procesarlos y luego renderizar un template con esos
+          datos.</li>
+       </ul>
+    </p> 
+
+    <h2>Templates (Plantillas):</h2>
+    <p style="color: black; font-size: 20px">
+      <ul>
+        <li><strong>Funcionalidad Principal:</strong> Los templates en Django son archivos que definen la 
+          presentación de las páginas web. Utilizan la sintaxis de Django para incorporar 
+          variables, estructuras de control y tags especiales que permiten dinamizar el 
+          contenido.</li>
+        <li><strong>Ejemplo de Funcionalidad: </strong>Un template puede mostrar datos de una vista, permitir 
+          la iteración sobre una lista de elementos y mostrar formularios HTML.</li>
+       </ul>
+    </p>
+
+    <h2>URLs (Rutas):</h2>
+    <p style="color: black; font-size: 20px">
+      <ul>
+        <li><strong>URLs (Rutas):</strong> Las URLs en Django mapean las solicitudes HTTP a funciones de 
+          vista específicas. Ayudan a definir la estructura de las URL de la aplicación y a dirigir 
+          el tráfico a las vistas correspondientes.</li>
+        <li><strong>Ejemplo de Funcionalidad: </strong>Una URL puede asociar una ruta como "/productos/" con una 
+          vista que muestra todos los productos disponibles en una tienda en línea.</li>
+       </ul>
+    </p>
+  </body>
+</html>
+{% endblock %}

@@ -1,0 +1,192 @@
+----------------
+Sobre views.py
+1. En views va la logica que se aplica en los templates
+
+2. En el caso de la función render, recibe 3 argumentos, el primero es el request, el segundo
+es el template y el tercero es un argumento conttext que permite poder utilizar las keys del diccionario
+en los templates para ejecutar el código con jinja. 
+
+    2.1 Para el caso del signup, el argumento context de la función render es un diccionario que contiene 
+    datos que se pasan a la plantilla para su renderización.
+
+    2.2 request.POST es un diccionario que contiene datos enviados mediante una solicitud HTTP utilizando el método POST
+
+3. user = User.objects.create_user
+    3.1 User: En el contexto de Django es el modelo predeterminado de usuario proporcionado por el sistema de autenticación de Django. 
+    Este modelo incluye campos comunes como username, password, email, etc.
+
+    3.2 objects: En Django, objects es un administrador de consultas (query manager) proporcionado por defecto para cada modelo. Permite 
+    realizar consultas en la base de datos asociada con el modelo.
+
+    3.3 create_user: create_user es un método específico del modelo User que simplifica la creación de un nuevo usuario. Este método maneja 
+    automáticamente la creación de la instancia del modelo, la generación y el almacenamiento seguro de la contraseña, 
+    y otros aspectos relacionados con la creación de usuarios.
+
+    3.4 from django.contrib.auth import login sirve para poder crear la logica para crear cookie de sesion.
+    Esta logica es la que permite asignar permisos a los usuarios o ver como interactuan con el sitio. 
+
+4. Cuando se crea o se importan métodos de django, debemos de nombrar las funciones de otra manera para 
+evitar conflictos, caso de login y logout
+
+5.Importante Para poder acceder a las variables por parte de los templates, tiene que estar definidas en su render de funcion views. 
+En el caso del template que funciona como marco para los otros templates, si se hace uso de una variable, tiene que estar definida en 
+los renders de las funciones de los views para que pueda ser localizada
+
+6. En views tenemos admin, que se refiere al sistema de administracion de Django.  En este archivo se deben de relacionar los modelos 
+de base de datos que hemos migrado para que las podamos manejar desde el administrador. 
+
+---------------------------
+Sobre template
+1. Se crean las plantillas html en donde con jinja
+
+    1.1 Jinja es un motor de plantillas para Python que se utiliza comúnmente en aplicaciones web y 
+    en combinación con marcos como Flask y Django.
+
+2. Para el caso del proyecto djangocrud se crea una plantilla que podra heredar una base a todas las plantillas (base.html)
+        {% block content %}
+        {% endblock %}
+
+    2.1 {% extends 'base.html' %} sirve para extender la plantilla a otras url
+
+    2.2 Tambien sirve para mostar elementos dependiendo de los estados: por ejemplo en el caso de que el usuario este autenticado,
+    se muestra un logout o un signup: 
+
+            {% if user.is_authenticated %}
+            <li>
+                <a href="/logout">Logout</a>
+            </li>
+            {% else %}
+            <li>
+                <a href="/signup">Signup</a>
+            </li>
+            {% endif %}
+    2.3 Tambien nos permite verificar el tipo de usuario: por el momento podemos verificar si el usuario es superusuario:
+            {% if user.is_superuser %}
+            <a href="/admin">Panel de administración</a>
+            {% endif %}        
+
+3. Importante = los dobles corchetes dobles, como {{ error_message }}, se utilizan para incrustar variables en las plantillas. 
+Estos corchetes dobles son un marcador de posición que se remplazará por el valor real de la variable cuando se renderice la plantilla -->
+{{error_message}}
+
+4. En el caso de el tag form de html si la url a la que se envia la información es la misma que la url donde se encuentra el diccionario
+entonces no es necesario utilizar "action =", sin embargo si se envia la infoprmación del formulario a otra url se debe de incluir en este
+tag.
+
+5. En Django, {% csrf_token %} se utiliza para agregar un token de protección contra falsificación de
+ solicitudes entre sitios (CSRF) en formularios HTML. CSRF es un tipo de ataque en el que un atacante puede realizar acciones en nombre de un 
+ usuario sin su consentimiento. Django protege contra este tipo de ataques mediante la inclusión de un token CSRF en los formularios.
+
+6. Es importante recordar que si vamos a hacer href a una ruta que se extiende de la url actual, unicamente debemos poner el nombre como el
+ caso de Tasks y Create Task:
+    
+    {% if user.is_authenticated %}
+    <ul>
+      <li>
+        <a href="create">Crear Tarea</a>
+      </li>
+    </ul>
+    {% endif %}
+
+En cambio en base, la ruta se coloca tal cual las url sin html es decir /signup por ejemplo. 
+
+7. En el ejemplo anterior se ve como se puede utilizar if statement para mostrar u ocultar elementos dependiendo de ciertas condiciones. 
+----------------------
+Sobre urls
+
+---------------------
+Sobre models
+
+1. Django viene con ORM = Object Relational Mapping, que permite reaalizar consultas a nuestra base de datos. 
+
+Atajos
+
+1. F1 Format document: sirve para poder darle formato al codigo
+
+2. Eliminacion Cascade se refiere en SQL a que si la tabla de uno a muchos se elimina, la tabla con el foreingkey se elimina tambien. 
+
+3. python manage.py makemigrations Este comando genera las migraciones pendientes basadas en los cambios realizados en los modelos. 
+   Las migraciones se guardan en un archivo llamado 000X_migration_name.py en la carpeta migrations de cada aplicación.
+
+ 3.1 python manage.py migrate El comando python manage.py migrate en Django es utilizado para aplicar migraciones pendientes en la base de datos.
+
+4. python manage.py createsuperuser para crear superusuario para usuarlo en admin
+
+5. Las bases de datos se crean mediante clases heredando models.Models, en models.py, los cuales tambien pueden incluir el metodo str 
+de la siguiente forma:     
+        def __str__(self):
+         return self.title + ' - by ' + self.user.username
+    Lo anterior permite que cuando el objeto instanciado de la clase se muestre en admin, figure lo que queremos representar. en este caso
+    el titulo de la tarea y el nombre del usuario. 
+
+6. Es importante recordar que si queremos que se muestren campos de nuestro modelo (base de datos) en el gestor de admin de Django 
+unicamente como read only se debe de especificar en la view de admin: 
+            class TaskAdmin(admin.ModelAdmin):
+                readonly_fields = ('created',)
+
+---------------------
+Sobre  admin
+
+En esta vista debemos de registrar nuestros modelos para poder administrarlos, así como las funciones especificas como readonly_fields
+
+class TaskAdmin(admin.ModelAdmin):
+    readonly_fields = ('created',)
+
+# Register your models here.
+admin.site.register(Task, TaskAdmin)
+
+---------------
+Sobre forms (personalizados)
+
+1. Se utiliza models y las tablas que se creen con orm.
+2. Tambien se debe de considerar que se crea una capa de forms, importando models y creando la respectiva clase, podamos acceder a ella desde views
+
+3. La clase de forms utiliza la clase meta para definir que modelo se utilizara (es decir a que campos podra acceder) y definir los campos a mostrar
+    
+    class TaskForm(ModelForm):
+        class Meta:
+            model = Task
+            fields = ['title', 'description', 'important']
+
+   3.1 Especificamente, model = Task indica que TaskForm está relacionado con la clase Task. Esto permite a Django 
+   crear formularios de un modelo dado y, al hacerlo, el formulario estará asociado con las validaciones y las 
+   restricciones de la clase Task.     
+
+4. Luego se crea en views un metodo para poder responder a los request GET y POST. Para este caso se crea la logica necesaria para que 
+    se pueda recuperar la informacion del request POST del formulario:
+
+            form = TaskForm(request.POST)
+            new_task = form.save(commit=False)
+            new_task.user = request.user
+            new_task.save()
+
+5. Con la logica anterior se salva la informacion en nuestra base de datos en donde se registro el modelo
+Task.
+
+--------
+Sobre actualizar en git
+1. Primero, necesitas crear un nuevo repositorio en GitHub o en cualquier otro proveedor de Git. Toma nota de la URL del repositorio, que será necesaria para conectar tu repositorio local con el repositorio remoto.
+
+2. Abre la terminal en Visual Code (View -> Terminal).
+
+3. Navega hasta el directorio donde se encuentra tu proyecto.
+
+4. Ejecuta el siguiente comando para inicializar un repositorio Git en tu proyecto: git init
+
+5. A continuación, debes agregar todos los archivos de tu proyecto al repositorio. Puedes hacer esto usando el siguiente comando:
+git add .
+
+6. Ahora, debes realizar un commit de todos los archivos. Esto creará una copia instantánea de tu proyecto en el repositorio Git:
+git commit -m "Primer commit"
+
+7. Finalmente, conecta tu repositorio local con el repositorio remoto en GitHub:git remote add origin URL_DEL_REPOSITORIO
+Asegúrate de reemplazar URL_DEL_REPOSITORIO con la URL real del repositorio en GitHub o en otro proveedor de Git.
+
+8. Por último, sube tus cambios al repositorio remoto en GitHub:
+git push -u origin master
+
+Una vez que hayas completado estos pasos, tu proyecto se habrá respaldado en GitHub o en cualquier otro proveedor de Git. 
+Ahora puedes hacer seguimiento de los cambios que realices en tu proyecto y restaurar fácilmente versiones anteriores si es necesario.
+
+
+
