@@ -97,3 +97,7 @@ def create_task(request):
                 'form': TaskForm,
                 'error_message': 'Proporciona datos validos'
             })
+
+
+def list_task():
+    return 'pendiente'
