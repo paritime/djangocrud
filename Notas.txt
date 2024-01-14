@@ -164,7 +164,7 @@ Sobre forms (personalizados)
 Task.....
 
 --------
-Sobre actualizar en git
+Sobre actualizar en git (aprender bien git))
 1. Primero, necesitas crear un nuevo repositorio en GitHub o en cualquier otro proveedor de Git. Toma nota de la URL del repositorio, que será necesaria para conectar tu repositorio local con el repositorio remoto.
 
 2. Abre la terminal en Visual Code (View -> Terminal).
