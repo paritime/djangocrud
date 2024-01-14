@@ -161,7 +161,7 @@ Sobre forms (personalizados)
             new_task.save()
 
 5. Con la logica anterior se salva la informacion en nuestra base de datos en donde se registro el modelo
-Task.
+Task.....
 
 --------
 Sobre actualizar en git
