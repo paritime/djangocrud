@@ -174,7 +174,7 @@ Sobre actualizar en git
 4. Ejecuta el siguiente comando para inicializar un repositorio Git en tu proyecto: git init
 
 5. A continuación, debes agregar todos los archivos de tu proyecto al repositorio. Puedes hacer esto usando el siguiente comando:
-git add .
+git add ..
 
 6. Ahora, debes realizar un commit de todos los archivos. Esto creará una copia instantánea de tu proyecto en el repositorio Git:
 git commit -m "Primer commit"
