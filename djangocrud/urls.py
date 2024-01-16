@@ -19,7 +19,7 @@ from django.urls import path
 from tasks import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls, name='admin'),
     path('', views.home, name='home'),
     path('signup/', views.signup, name='signup'),
     path('task/', views.tasks, name='tasks'),

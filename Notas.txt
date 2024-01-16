@@ -1,6 +1,7 @@
 ----------------
 Sobre views.py
-1. En views va la logica que se aplica en los templates
+1. En views va la logica que se aplica en los templates: basicamente puedes definir variables, consultas o procesamiento de datos 
+que luego mandas a render al template asociado en la configuracion de urls
 
 2. En el caso de la función render, recibe 3 argumentos, el primero es el request, el segundo
 es el template y el tercero es un argumento conttext que permite poder utilizar las keys del diccionario
@@ -35,6 +36,27 @@ los renders de las funciones de los views para que pueda ser localizada
 6. En views tenemos admin, que se refiere al sistema de administracion de Django.  En este archivo se deben de relacionar los modelos 
 de base de datos que hemos migrado para que las podamos manejar desde el administrador. 
 
+7. Para poder obtener la informacion que tiene un modelo y luego representarla en un template, se pueden utilizar bucles para recorrer arreglos,
+pero para eso tenemos que hacer render a esos arreglos de los modelos
+
+def tasks(request):
+    if request.method == 'GET':
+      tasks = Task.objects.filter(    
+            user=request.user, datecompleted__isnull=True) --> arreglo
+        return render(request, 'task.html', {
+            'variable1': 'variabletask',
+            'tasks': tasks
+        }) --> se manda a render
+
+        7.1 tasks.objects regresa un <QuerySet de este tipo [<Task: Tarea ejemplo 3 - by parit>, 
+        <Task: Tarea ejemplo 1 - by parit>, <Task: Tarea ejemplo 2 - by parit>]>
+
+        7.2 QuerySet: Básicamente, es una lista de objetos de modelo que cumplen con ciertos criterios de filtrado y consulta. Los QuerySets 
+        permiten a los desarrolladores interactuar con la base de datos de manera intuitiva y expresiva a través del ORM 
+        (Mapeo Objeto-Relacional) de Django.
+        
+8. Debemos de considerar una variable context fuera del return render para mejor visualizacion y control y luego pasasr esa variable context 
+en el metodo render
 ---------------------------
 Sobre template
 1. Se crean las plantillas html en donde con jinja
@@ -141,7 +163,8 @@ Sobre forms (personalizados)
 1. Se utiliza models y las tablas que se creen con orm.
 2. Tambien se debe de considerar que se crea una capa de forms, importando models y creando la respectiva clase, podamos acceder a ella desde views
 
-3. La clase de forms utiliza la clase meta para definir que modelo se utilizara (es decir a que campos podra acceder) y definir los campos a mostrar
+3. La clase de forms utiliza la clase meta para definir que modelo se utilizara (es decir a que campos podra acceder) y definir los campos a 
+mostrar
     
     class TaskForm(ModelForm):
         class Meta:
