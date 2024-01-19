@@ -33,18 +33,24 @@
       tareas -->
       {% for task in tasks %}
       <li>
-        {% if task.important %}
-        <h5>
-          <strong
-            >{{task.title}}
-            <span style="font-size: smaller"> / important</span>
-          </strong>
-        </h5>
-        {% else %}
-        <h5>{{task.title}}</h5>
-        {% endif %}
-        <p>{{task.description}}</p>
-        <p><span>Author: </span>{{task.user.username}}</p>
+        <a href="{% url 'task_detail' task.id %}">
+          {% if task.important %}
+          <h5>
+            <strong
+              >{{task.title}}
+              <span style="font-size: smaller"> / important</span>
+            </strong>
+          </h5>
+          {% else %}
+          <h5>{{task.title}}</h5>
+          {% endif %}
+          <p>{{task.description}}</p>
+          <p>
+            <span>Author: </span>{{task.user.username}}
+            <span>/ creada el {{ task.created }}</span>
+          </p>
+          <p></p>
+        </a>
       </li>
       {% endfor %}
     </ul>

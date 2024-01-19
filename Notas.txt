@@ -186,8 +186,50 @@ mostrar
 5. Con la logica anterior se salva la informacion en nuestra base de datos en donde se registro el modelo
 Task.....
 
+
+---------
+Interacciones:
+
+A.- La interaccion para consultar tareas especificas debe de considerar lo siguiente (información desde template se envia como GET ->
+ recibe el GET con la informacion adicional en el path de la url -> se ejecuta la logica en views):
+
+1.-Se crea un url dinámica en donde se va a recibir un parametro que cambiara dependiento la tarea (<int:task_id>) Esto podría ser cualquier 
+atributo de un objeto task, por ejemplo el titulo o podrías recibir del template más de un argumento. 
+
+        path('task/<int:task_id>/', views.task_detail, name='task_detail')
+
+2.- Se debe de generar entonces la vista correspondiente con la funcionalidad que se desea:
+       
+        def task_detail(request, task_id):            
+            task = get_object_or_404(Task, pk=task_id)
+            context = {'task': task}
+            return render(request, 'task_detail.html', context)
+
+2.1 La función recibe dos parámetros, el primero el request y el segundo el id específico para buscar la tarea. Ambos datos
+deben de provenir del template, pero el task id se pasa por medio de la url desde el template con: 
+
+        <a href="{% url 'task_detail' task.id %}">
+
+2.2 La función devuelve el render con el request, lo lleva al template task_detail y devuelve el objeto
+task en el contexto, con el que podemos acceder a sus propiedades. 
+
+        <body>
+            <h1>{{task.title}}</h1>
+            <p>Descripción: {{task.description}}</p>
+        </body>
+
+2.3 Se obtienen con el método get_object que utiliza el modelo Task y define la primary key con base en lo que envia el template.
+Esto permite que la variable task se vuelva el objeto específico asociado a la primary key correspondiente.
+
+2.4 Por ultimo devuelve con render el contexto (objeto asociado a la primary key), la información del request y renderea task_detail.html'
+
+2.5 Lo anterior es posible por que en el template de task, mediante el loop se va iterando cada objeto de tasks. Es decir accediendo a 
+cada tarea y por lo tanto es desde la vista task.html que se accede al id de cada tarea y asignando dentro del for 
+un hipervinculo con <a href="{% url 'task_detail' task.id %}"> que envía el método get necesario con el id de la tarea y al recibirlo la vista
+mediante lo especificado en el path, lo pasa como argumento en la función y se asigna a la variable pk.
+
 --------
-Sobre actualizar en git (aprender bien git))
+Sobre actualizar en git (aprender bien git)
 1. Primero, necesitas crear un nuevo repositorio en GitHub o en cualquier otro proveedor de Git. Toma nota de la URL del repositorio, que será necesaria para conectar tu repositorio local con el repositorio remoto.
 
 2. Abre la terminal en Visual Code (View -> Terminal).
